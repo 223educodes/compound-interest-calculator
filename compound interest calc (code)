@@ -1,0 +1,112 @@
+def compound_interest_calculator():
+
+    print('\n===Compound Interest Calculator===\n')
+
+    #principal
+    while True:
+        try:
+            principal=float(input('Enter Initial Principal Amount(e.g 1000): '))
+            if principal <= 0:
+                print('Please enter a number greater than 0. Try again ')
+                continue
+            break
+
+        except ValueError:
+            print('Kindly enter a valid number')
+
+    #Rate
+    while True:
+        try:
+            rate=float(input('Enter annual Interest rate in % (e.g 5 for 5%):'))
+            if rate == 0:
+                print('0 % rate means there will not be a change from the initial principal amount')
+            if rate < 0:
+                print('Negative rate detected this means initial principal amount will decrease')
+                confirm=input('Do you still want to continue with negative rate(yes/no)? ').strip().lower()
+                if confirm !='yes':
+                    continue
+            break
+        except ValueError:
+            print("Please enter a valid number.")
+
+    # time
+    while True:
+        try:
+            years=int(input('Enter number of years '))
+            if years <=0:
+                print('kindly enter whole numbers greater than 0')
+                continue
+            break
+        except ValueError:
+            print("Please enter a valid number.")
+
+    #compounding frequency table
+    print("\n compounding frequency\n")
+
+    compounding_frequency = {
+        "Annually: (1 time per year)": 1,
+        "Semi-annually: (2 times per year)": 2,
+        "Quarterly: (4 times per year)": 4,
+        "Monthly: (12 times per year)": 12,
+        "Daily: (365 times per year)": 365
+    }
+
+    for i, key in enumerate(compounding_frequency.keys(), 1):
+        print(f"{i}) {key}")
+    print()
+    accepted_choices=[1,2,3,4,5]
+
+    #getting & using compounding frequency
+    while True:
+        try:
+            user_choice=int(input('Choose frequency (1-5): '))
+            if user_choice not in accepted_choices:
+                print('Invalid choice. Please pick 1-5.')
+                continue
+            break
+        except ValueError:
+            print('Please enter a whole number between 1 and 5.')
+
+    # variable assignment/unpacking from compounding frequency dict
+    options=list(compounding_frequency.items())
+    key, n = options[user_choice-1]
+
+    #dynamic table heading generation
+    print(f"\n===Projection Table {key} Compounding===\n")
+    print(f"{'Year':<6} {'Balance':<15} {'Interest Earned This Year':<25}")
+    print("-" * 50)
+
+    # Calculate compound interest using formula for final amount
+    # But we'll also show year-by-year growth using a loop
+
+    balance = principal
+    previous_balance=principal
+
+    for year in range(1, years+1):
+        # Calculate balance at end of each year
+        balance = principal*(1+((rate/100)/n))**(n*year)
+
+        # Interest earned this year
+        interest_this_year = balance - previous_balance
+
+        # Print nicely formatted row
+        print(f"{year:<6} ${balance:,.2f}      ${interest_this_year:,.2f}")
+
+        previous_balance = balance
+
+        # Final summary
+    total_interest = balance - principal
+    print("-" * 50)
+    print(f"After {years} years, your investment will grow to: ${balance:,.2f}")
+    print(f"Total interest earned: ${total_interest:,.2f}")
+    print(f"Growth multiple: {balance / principal:.2f}x")
+
+
+# Run the program
+if __name__ == "__main__":
+    try:
+        compound_interest_calculator()
+    except KeyboardInterrupt:
+        print('\nProgram terminated by user. Goodbye')
+
+
